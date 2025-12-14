@@ -44,7 +44,7 @@
     <!-- App Installer Configuration for Auto-Updates -->
     <GenerateAppInstallerFile>True</GenerateAppInstallerFile>
     <!-- Note: This URI is a placeholder. Run scripts\Update-AppInstaller.ps1 after building to set correct release URLs -->
-    <AppInstallerUri>https://github.com/JoeTomkinson/CommonToggleButtonUI/releases/download/v1.0.0</AppInstallerUri>
+    <AppInstallerUri>https://github.com/JoeTomkinson/CommonToggleButtonUI/releases/download/v1.1.0</AppInstallerUri>
     <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
     <AppInstallerUpdateFrequency>0</AppInstallerUpdateFrequency>
     <AppInstallerShowPrompt>True</AppInstallerShowPrompt>
