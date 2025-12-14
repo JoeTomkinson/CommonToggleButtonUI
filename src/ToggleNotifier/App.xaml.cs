@@ -1,28 +1,38 @@
 using System;
+using System.Media;
 using System.Windows;
 using ToggleNotifier.Configuration;
 using ToggleNotifier.Notifications;
 using ToggleNotifier.Services;
+using ToggleNotifier.Theming;
 
 namespace ToggleNotifier;
 
-public partial class App : Application
+public partial class App : System.Windows.Application
 {
     private KeyToggleListener? _keyListener;
     private OverlayService? _overlayService;
     private TrayService? _trayService;
     private ConfigService? _configService;
     private StartupManager? _startupManager;
+    private ThemeService? _themeService;
+    private AppSettings? _settings;
 
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
 
         _configService = new ConfigService();
-        var settings = _configService.Load();
+        _settings = _configService.Load();
+
+        // Initialize theme service
+        _themeService = new ThemeService
+        {
+            CurrentTheme = _settings.Theme
+        };
 
         _startupManager = new StartupManager("CommonToggleButtonUI", AppContext.BaseDirectory);
-        if (settings.LaunchOnSignIn)
+        if (_settings.LaunchOnSignIn)
         {
             _startupManager.EnableStartup();
         }
@@ -31,21 +41,27 @@ public partial class App : Application
             _startupManager.DisableStartup();
         }
 
-        _overlayService = new OverlayService(settings);
+        _overlayService = new OverlayService(_settings, _themeService);
+        _overlayService.SettingsUpdated += OnSettingsUpdated;
 
-        var mainWindow = new MainWindow(settings, _configService, _startupManager, _overlayService)
+        var mainWindow = new MainWindow(_settings, _configService, _startupManager, _overlayService, _themeService)
         {
             Visibility = Visibility.Hidden
         };
         MainWindow = mainWindow;
 
-        _trayService = new TrayService(mainWindow);
+        _trayService = new TrayService(mainWindow, _themeService);
         _trayService.ExitRequested += OnExitRequested;
         _trayService.SettingsRequested += OnSettingsRequested;
 
         _keyListener = new KeyToggleListener();
         _keyListener.KeyStateChanged += OnKeyStateChanged;
         _keyListener.Start();
+    }
+
+    private void OnSettingsUpdated(object? sender, AppSettings settings)
+    {
+        _settings = settings;
     }
 
     protected override void OnExit(ExitEventArgs e)
@@ -78,11 +94,33 @@ public partial class App : Application
 
     private void OnKeyStateChanged(object? sender, KeyStateChangedEventArgs e)
     {
-        if (_overlayService == null)
+        if (_overlayService == null || _settings == null)
         {
             return;
         }
 
-        Dispatcher.Invoke(() => _overlayService.ShowToast(e));
+        // Check if this key is enabled for notifications
+        var shouldNotify = e.KeyName switch
+        {
+            "Caps Lock" => _settings.KeySettings.CapsLock,
+            "Num Lock" => _settings.KeySettings.NumLock,
+            "Scroll Lock" => _settings.KeySettings.ScrollLock,
+            _ => true
+        };
+
+        if (!shouldNotify)
+        {
+            return;
+        }
+
+        Dispatcher.Invoke(() =>
+        {
+            _overlayService.ShowToast(e);
+
+            if (_settings.PlaySound)
+            {
+                SystemSounds.Asterisk.Play();
+            }
+        });
     }
 }

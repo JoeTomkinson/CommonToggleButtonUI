@@ -43,26 +43,35 @@ public class KeyToggleListener : IDisposable
 
     private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
     {
-        if (nCode >= 0 && (wParam == (IntPtr)NativeMethods.WM_KEYDOWN || wParam == (IntPtr)NativeMethods.WM_SYSKEYDOWN))
+        if (nCode >= 0)
         {
             var vkCode = Marshal.ReadInt32(lParam);
-            switch (vkCode)
+
+            // Toggle keys: detect state change on key up, when the toggle state is reliably updated
+            if (wParam == (IntPtr)NativeMethods.WM_KEYUP || wParam == (IntPtr)NativeMethods.WM_SYSKEYUP)
             {
-                case NativeMethods.VK_CAPITAL:
-                    HandleToggleChanged("Caps Lock", ref _capsOn, NativeMethods.VK_CAPITAL);
-                    break;
-                case NativeMethods.VK_NUMLOCK:
-                    HandleToggleChanged("Num Lock", ref _numOn, NativeMethods.VK_NUMLOCK);
-                    break;
-                case NativeMethods.VK_SCROLL:
-                    HandleToggleChanged("Scroll Lock", ref _scrollOn, NativeMethods.VK_SCROLL);
-                    break;
-                default:
-                    // Occasionally re-evaluate in case the state changed via remote input.
+                switch (vkCode)
+                {
+                    case NativeMethods.VK_CAPITAL:
+                        HandleToggleChanged("Caps Lock", ref _capsOn, NativeMethods.VK_CAPITAL);
+                        break;
+                    case NativeMethods.VK_NUMLOCK:
+                        HandleToggleChanged("Num Lock", ref _numOn, NativeMethods.VK_NUMLOCK);
+                        break;
+                    case NativeMethods.VK_SCROLL:
+                        HandleToggleChanged("Scroll Lock", ref _scrollOn, NativeMethods.VK_SCROLL);
+                        break;
+                }
+            }
+            // For other keys, occasionally re-evaluate toggle states in case they changed via remote input
+            else if (wParam == (IntPtr)NativeMethods.WM_KEYDOWN || wParam == (IntPtr)NativeMethods.WM_SYSKEYDOWN)
+            {
+                if (vkCode != NativeMethods.VK_CAPITAL && vkCode != NativeMethods.VK_NUMLOCK && vkCode != NativeMethods.VK_SCROLL)
+                {
                     HandleToggleChanged("Caps Lock", ref _capsOn, NativeMethods.VK_CAPITAL, silentWhenUnchanged: true);
                     HandleToggleChanged("Num Lock", ref _numOn, NativeMethods.VK_NUMLOCK, silentWhenUnchanged: true);
                     HandleToggleChanged("Scroll Lock", ref _scrollOn, NativeMethods.VK_SCROLL, silentWhenUnchanged: true);
-                    break;
+                }
             }
         }
 

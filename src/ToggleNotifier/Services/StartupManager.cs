@@ -1,5 +1,7 @@
 using Microsoft.Win32;
+using System;
 using System.IO;
+using System.Reflection;
 
 namespace ToggleNotifier.Services;
 
@@ -11,7 +13,14 @@ public class StartupManager
     public StartupManager(string appName, string executableDirectory)
     {
         _appName = appName;
-        _executablePath = Path.Combine(executableDirectory, $"{appName}.exe");
+        // Use the actual executing assembly name instead of hardcoded appName
+        var exeName = Path.GetFileName(Assembly.GetExecutingAssembly().Location);
+        // Fallback for single-file publish scenarios
+        if (string.IsNullOrEmpty(exeName) || !exeName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+        {
+            exeName = $"{Assembly.GetExecutingAssembly().GetName().Name}.exe";
+        }
+        _executablePath = Path.Combine(executableDirectory, exeName);
     }
 
     public void EnableStartup()

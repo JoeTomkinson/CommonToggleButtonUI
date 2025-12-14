@@ -1,0 +1,25 @@
+<Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+         Width="256" Height="256">
+    <Canvas Width="256" Height="256">
+        <!-- Background rounded rectangle -->
+        <Rectangle Width="256" Height="256" RadiusX="48" RadiusY="48">
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#0078D4" Offset="0"/>
+                    <GradientStop Color="#005A9E" Offset="1"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        
+        <!-- Keyboard key representation -->
+        <Rectangle Canvas.Left="48" Canvas.Top="80" Width="160" Height="96" 
+                   RadiusX="12" RadiusY="12" Fill="#FFFFFF" Opacity="0.95"/>
+        
+        <!-- Toggle indicator circle (On state) -->
+        <Ellipse Canvas.Left="168" Canvas.Top="56" Width="40" Height="40" Fill="#10B981"/>
+        
+        <!-- Key symbol (Caps Lock arrow) -->
+        <Path Canvas.Left="100" Canvas.Top="108" Fill="#0078D4"
+              Data="M28,0 L56,32 L40,32 L40,48 L16,48 L16,32 L0,32 Z"/>
+    </Canvas>
+</Viewbox>

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ToggleNotifier.Configuration;
 
@@ -9,7 +10,8 @@ public class ConfigService
     private readonly JsonSerializerOptions _jsonOptions = new()
     {
         PropertyNameCaseInsensitive = true,
-        WriteIndented = true
+        WriteIndented = true,
+        Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
     };
 
     private readonly string _configPath;
@@ -34,7 +36,14 @@ public class ConfigService
         {
             var json = File.ReadAllText(_configPath);
             var settings = JsonSerializer.Deserialize<AppSettings>(json, _jsonOptions);
-            return settings ?? LoadBundledDefaults();
+            
+            // Merge with defaults to ensure new properties have default values
+            if (settings != null)
+            {
+                return MergeWithDefaults(settings);
+            }
+            
+            return LoadBundledDefaults();
         }
         catch
         {
@@ -48,6 +57,21 @@ public class ConfigService
         File.WriteAllText(_configPath, json);
     }
 
+    /// <summary>
+    /// Ensures that all new properties have their default values when loading
+    /// an older config file that may not contain them.
+    /// </summary>
+    private static AppSettings MergeWithDefaults(AppSettings loaded)
+    {
+        var defaults = new AppSettings();
+        
+        // Ensure nested objects are not null
+        loaded.ToastOffsets ??= defaults.ToastOffsets;
+        loaded.KeySettings ??= defaults.KeySettings;
+        
+        return loaded;
+    }
+
     private AppSettings LoadBundledDefaults()
     {
         try
@@ -59,7 +83,7 @@ public class ConfigService
                 var settings = JsonSerializer.Deserialize<AppSettings>(json, _jsonOptions);
                 if (settings != null)
                 {
-                    return settings;
+                    return MergeWithDefaults(settings);
                 }
             }
         }
