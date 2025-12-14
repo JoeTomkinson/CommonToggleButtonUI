@@ -20,25 +20,26 @@
                    TextWrapping="Wrap"
                    AutomationProperties.Name="App description" />
 
-        <StackPanel Grid.Row="1" VerticalAlignment="Top" Spacing="10">
+        <StackPanel Grid.Row="1" VerticalAlignment="Top">
             <CheckBox x:Name="LaunchOnSignInBox"
                       Content="Launch automatically when I sign in"
                       AutomationProperties.Name="Launch on sign in"
-                      IsChecked="True" />
+                      IsChecked="True"
+                      Margin="0,0,0,10" />
 
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,10">
                 <TextBlock Width="170" Text="Horizontal offset (px):"
                            VerticalAlignment="Center" />
                 <TextBox x:Name="HorizontalOffsetBox" Width="80" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,10">
                 <TextBlock Width="170" Text="Vertical offset (px):"
                            VerticalAlignment="Center" />
                 <TextBox x:Name="VerticalOffsetBox" Width="80" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,10">
                 <TextBlock Width="170" Text="Toast dismiss (ms):"
                            VerticalAlignment="Center" />
                 <TextBox x:Name="DismissBox" Width="80" />
@@ -55,12 +56,13 @@
             </Border>
         </StackPanel>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Margin="0,12,0,0">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
             <Button x:Name="SaveButton"
                     Width="120"
                     Content="Save and hide"
                     AutomationProperties.Name="Save settings"
-                    Click="OnSave" />
+                    Click="OnSave"
+                    Margin="0,0,8,0" />
             <Button Width="100"
                     Content="Close"
                     AutomationProperties.Name="Close window"
