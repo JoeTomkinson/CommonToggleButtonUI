@@ -134,6 +134,15 @@ public partial class MainWindow : Window
         };
         ThemeComboBox.SelectedIndex = themeIndex;
 
+        // Toast style
+        var toastStyleIndex = _settings.ToastStyle switch
+        {
+            ToastStyle.Standard => 0,
+            ToastStyle.Compact => 1,
+            _ => 0
+        };
+        ToastStyleComboBox.SelectedIndex = toastStyleIndex;
+
         // Position
         var positionIndex = (int)_settings.ToastPosition;
         PositionComboBox.SelectedIndex = positionIndex;
@@ -146,6 +155,9 @@ public partial class MainWindow : Window
         // Sound
         PlaySoundBox.IsChecked = _settings.PlaySound;
 
+        // Behavior
+        SuppressInFullscreenBox.IsChecked = _settings.SuppressInFullscreen;
+
         // Startup
         LaunchOnSignInBox.IsChecked = _settings.LaunchOnSignIn;
     }
@@ -154,9 +166,17 @@ public partial class MainWindow : Window
     {
         // Apply current form values temporarily for preview
         var tempSettings = CreateSettingsFromForm();
-        var toast = new ToastWindow("Caps Lock", true, tempSettings, _themeService)
+        
+        Window toast = tempSettings.ToastStyle switch
         {
-            Topmost = true
+            ToastStyle.Compact => new CompactToastWindow("Caps Lock", true, tempSettings, _themeService)
+            {
+                Topmost = true
+            },
+            _ => new ToastWindow("Caps Lock", true, tempSettings, _themeService)
+            {
+                Topmost = true
+            }
         };
         toast.Show();
     }
@@ -205,6 +225,12 @@ public partial class MainWindow : Window
             _ => AppTheme.System
         };
 
+        var toastStyle = ToastStyleComboBox.SelectedIndex switch
+        {
+            1 => ToastStyle.Compact,
+            _ => ToastStyle.Standard
+        };
+
         var position = (ToastPosition)PositionComboBox.SelectedIndex;
 
         return new AppSettings
@@ -217,8 +243,10 @@ public partial class MainWindow : Window
             ToastDismissMilliseconds = Math.Max(500, dismissMs),
             LaunchOnSignIn = LaunchOnSignInBox.IsChecked == true,
             Theme = theme,
+            ToastStyle = toastStyle,
             ToastPosition = position,
             PlaySound = PlaySoundBox.IsChecked == true,
+            SuppressInFullscreen = SuppressInFullscreenBox.IsChecked == true,
             KeySettings = new KeyNotificationSettings
             {
                 CapsLock = CapsLockBox.IsChecked == true,

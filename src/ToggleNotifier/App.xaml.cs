@@ -16,6 +16,7 @@ public partial class App : System.Windows.Application
     private ConfigService? _configService;
     private StartupManager? _startupManager;
     private ThemeService? _themeService;
+    private SnoozeService? _snoozeService;
     private AppSettings? _settings;
 
     protected override void OnStartup(StartupEventArgs e)
@@ -31,6 +32,9 @@ public partial class App : System.Windows.Application
             CurrentTheme = _settings.Theme
         };
 
+        // Initialize snooze service
+        _snoozeService = new SnoozeService();
+
         _startupManager = new StartupManager("CommonToggleButtonUI", AppContext.BaseDirectory);
         if (_settings.LaunchOnSignIn)
         {
@@ -41,7 +45,7 @@ public partial class App : System.Windows.Application
             _startupManager.DisableStartup();
         }
 
-        _overlayService = new OverlayService(_settings, _themeService);
+        _overlayService = new OverlayService(_settings, _themeService, _snoozeService);
         _overlayService.SettingsUpdated += OnSettingsUpdated;
 
         var mainWindow = new MainWindow(_settings, _configService, _startupManager, _overlayService, _themeService)
@@ -50,7 +54,7 @@ public partial class App : System.Windows.Application
         };
         MainWindow = mainWindow;
 
-        _trayService = new TrayService(mainWindow, _themeService);
+        _trayService = new TrayService(mainWindow, _themeService, _snoozeService);
         _trayService.ExitRequested += OnExitRequested;
         _trayService.SettingsRequested += OnSettingsRequested;
 

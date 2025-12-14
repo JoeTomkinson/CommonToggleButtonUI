@@ -313,6 +313,29 @@
                     </Grid>
                 </Border>
                 
+                <Border Style="{StaticResource SettingsCard}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Toast style" FontSize="14" FontWeight="Medium" Style="{StaticResource PrimaryText}"/>
+                            <TextBlock Text="Standard shows full details, compact shows only icon" 
+                                       FontSize="12" Margin="0,2,0,0" Style="{StaticResource SecondaryText}"/>
+                        </StackPanel>
+                        <ComboBox x:Name="ToastStyleComboBox" 
+                                  Grid.Column="1" 
+                                  Width="150" 
+                                  VerticalAlignment="Center"
+                                  Style="{StaticResource ThemedComboBox}"
+                                  AutomationProperties.Name="Toast style selection">
+                            <ComboBoxItem Content="Standard" Tag="Standard"/>
+                            <ComboBoxItem Content="Compact" Tag="Compact"/>
+                        </ComboBox>
+                    </Grid>
+                </Border>
+                
                 <!-- Position Section -->
                 <TextBlock Text="POSITION" Style="{StaticResource SectionHeader}"/>
                 
@@ -401,6 +424,28 @@
                                  HorizontalContentAlignment="Center"
                                  Style="{StaticResource ThemedTextBox}"
                                  AutomationProperties.Name="Dismiss duration"/>
+                    </Grid>
+                </Border>
+                
+                <!-- Behavior Section -->
+                <TextBlock Text="BEHAVIOR" Style="{StaticResource SectionHeader}"/>
+                
+                <Border Style="{StaticResource SettingsCard}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Suppress in fullscreen" FontSize="14" FontWeight="Medium" Style="{StaticResource PrimaryText}"/>
+                            <TextBlock Text="Hide notifications when a fullscreen app is running" 
+                                       FontSize="12" Margin="0,2,0,0" Style="{StaticResource SecondaryText}"/>
+                        </StackPanel>
+                        <CheckBox x:Name="SuppressInFullscreenBox" 
+                                  Style="{StaticResource ToggleSwitch}"
+                                  Grid.Column="1" 
+                                  VerticalAlignment="Center"
+                                  AutomationProperties.Name="Suppress in fullscreen"/>
                     </Grid>
                 </Border>
                 

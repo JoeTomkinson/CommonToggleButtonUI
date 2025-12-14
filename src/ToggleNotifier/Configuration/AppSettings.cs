@@ -28,6 +28,16 @@ public class AppSettings
     public AppTheme Theme { get; set; } = AppTheme.System;
 
     /// <summary>
+    /// Visual style of the toast notification.
+    /// </summary>
+    public ToastStyle ToastStyle { get; set; } = ToastStyle.Standard;
+
+    /// <summary>
+    /// Whether to suppress notifications when a fullscreen application is running.
+    /// </summary>
+    public bool SuppressInFullscreen { get; set; } = true;
+
+    /// <summary>
     /// Position of the toast notification on screen.
     /// </summary>
     public ToastPosition ToastPosition { get; set; } = ToastPosition.BottomRight;
@@ -61,6 +71,22 @@ public enum ToastPosition
     BottomLeft = 1,
     TopRight = 2,
     TopLeft = 3
+}
+
+/// <summary>
+/// Visual style of the toast notification.
+/// </summary>
+public enum ToastStyle
+{
+    /// <summary>
+    /// Standard toast with icon, key name, state text, and indicator.
+    /// </summary>
+    Standard = 0,
+
+    /// <summary>
+    /// Compact toast showing only the icon and status indicator dot.
+    /// </summary>
+    Compact = 1
 }
 
 /// <summary>

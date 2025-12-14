@@ -17,6 +17,9 @@ The `ToggleNotifier` project contains the WPF desktop app. It runs in the backgr
 - Launch-on-sign-in behavior
 - Overlay horizontal/vertical offsets
 - Auto-dismiss timing
+- Toast style (standard or compact)
+- Fullscreen suppression
+- Snooze notifications temporarily
 
 Settings are saved to `%APPDATA%/CommonToggleButtonUI/appsettings.json` and loaded on startup so the runtime indicator display stays in sync with user preferences.
 
@@ -26,12 +29,34 @@ Settings are saved to `%APPDATA%/CommonToggleButtonUI/appsettings.json` and load
 - Runs from the system tray with a quick exit option and a settings window for tweaking offsets, dismiss timing, and startup behavior.
 - Uses system brushes for high-contrast mode and keeps overlays from stealing focus.
 
+### Toast styles
+
+Choose between two notification styles in the settings:
+
+| Style | Description |
+|-------|-------------|
+| **Standard** | Full toast with key icon, name (e.g., "Caps Lock"), state text ("On"/"Off"), and a colored status indicator. |
+| **Compact** | Minimal design showing only the key symbol and a small green/gray status dot—great for a less intrusive experience. |
+
+### Fullscreen suppression
+
+Enable **Suppress in fullscreen** to automatically hide notifications when a fullscreen application is running. This is ideal for gaming or watching videos where you don't want toast popups interrupting your experience.
+
+### Snooze notifications
+
+Need to temporarily pause notifications? Right-click the tray icon and select **Snooze notifications** to silence them for:
+- 30 minutes
+- 1 hour
+- 2 hours
+
+While snoozed, the tray tooltip shows remaining time and a **Resume notifications** option appears in the menu to cancel early.
+
 ## Project layout
 - `CommonToggleButtonUI.sln` – Visual Studio solution.
 - `src/ToggleNotifier/ToggleNotifier.csproj` – WPF desktop application entry point (`App.xaml`).
 - `src/ToggleNotifier/appsettings.json` – default overlay offsets, dismiss timing, and launch-on-sign-in preference.
 - `src/ToggleNotifier/Notifications/*` – overlay window and service for showing toasts.
-- `src/ToggleNotifier/Services/*` – keyboard hook listener, startup registration, and tray icon wiring.
+- `src/ToggleNotifier/Services/*` – keyboard hook listener, startup registration, fullscreen detection, snooze management, and tray icon wiring.
 
 ## Running locally
 1. Open the solution in Visual Studio 2022 or newer on Windows with the .NET 10 SDK (Preview) and the Windows desktop workload installed.
