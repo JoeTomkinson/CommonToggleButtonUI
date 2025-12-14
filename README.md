@@ -25,7 +25,7 @@ Settings are saved to `%APPDATA%/CommonToggleButtonUI/appsettings.json` and load
 - `src/ToggleNotifier/Services/*` – keyboard hook listener, startup registration, and tray icon wiring.
 
 ## Running locally
-1. Open the solution in Visual Studio 2022 or newer on Windows with .NET 7 SDK and the Windows desktop workload installed.
+1. Open the solution in Visual Studio 2022 or newer on Windows with the .NET 10 SDK (Preview) and the Windows desktop workload installed.
 2. Restore NuGet packages and build the `ToggleNotifier` project.
 3. Run the application. A tray icon appears; toggle Caps Lock/Num Lock/Scroll Lock to see the overlay. Use the tray menu to open settings or exit.
 
