@@ -44,7 +44,7 @@
     <!-- App Installer Configuration for Auto-Updates -->
     <GenerateAppInstallerFile>True</GenerateAppInstallerFile>
     <!-- Note: This URI is a placeholder. Run scripts\Update-AppInstaller.ps1 after building to set correct release URLs -->
-    <AppInstallerUri>https://github.com/JoeTomkinson/CommonToggleButtonUI/releases/download/v2.0.0</AppInstallerUri>
+    <AppInstallerUri>https://github.com/JoeTomkinson/CommonToggleButtonUI/releases/download/v1.0.0</AppInstallerUri>
     <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
     <AppInstallerUpdateFrequency>0</AppInstallerUpdateFrequency>
     <AppInstallerShowPrompt>True</AppInstallerShowPrompt>
@@ -54,7 +54,7 @@
     <AppxBundle>Never</AppxBundle>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <AppxPackageDir>$(SolutionDir)AppPackages\</AppxPackageDir>
-    <PackageCertificateThumbprint>B05E733900012A193CD0B1D283F0B827688B8520</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>AEA3AA74898598263C1AEEE029075AD1A71CC5DE</PackageCertificateThumbprint>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
   </PropertyGroup>
   <ItemGroup>

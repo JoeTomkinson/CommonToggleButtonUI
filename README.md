@@ -1,5 +1,9 @@
 # CommonToggleButtonUI
 
+<p align="center">
+  <img src="./assets/app-logo.png" alt="CommonToggleButtonUI Logo" width="100" />
+</p>
+
 Simple Windows 11 compatible UI for keyboard buttons that typically toggle a state.
 
 ## Desktop app
