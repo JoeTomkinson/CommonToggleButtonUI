@@ -27,3 +27,4 @@ BundleArtifacts/
 
 # Temporary packaging files
 _pkginfo.txt
+/src/ToggleNotifier.Package/ToggleNotifier.Package_TemporaryKey.pfx
