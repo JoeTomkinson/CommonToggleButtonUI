@@ -1,0 +1,34 @@
+# MSIX Packaging Project .gitignore
+
+# Build output
+bin/
+obj/
+BundleArtifacts/
+
+# Package output (these go to solution-level AppPackages/)
+*.appx
+*.msix
+*.msixbundle
+*.appxbundle
+*.appxupload
+*.msixupload
+
+# Signing certificates - SECURITY: Never commit private keys
+# The .pfx file contains private keys and should not be in source control
+*.pfx
+
+# Exception: If using a temporary/test certificate, you may want to track it
+# Uncomment the line below to track the temporary key (not recommended for production)
+# !ToggleNotifier.Package_TemporaryKey.pfx
+
+# App installer files (generated during build, modified by scripts)
+# These should be regenerated for each release
+*.appinstaller
+
+# Packaging temporary files
+_pkginfo.txt
+*.pri
+resources.scale-*.pri
+
+# Layout folders
+AppxPackages/

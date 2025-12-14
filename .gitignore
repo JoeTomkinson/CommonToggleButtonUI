@@ -10,3 +10,20 @@ obj/
 
 # VS
 .vs/
+
+# MSIX Packaging
+AppPackages/
+BundleArtifacts/
+*.appx
+*.msix
+*.msixbundle
+*.appxbundle
+*.appxupload
+*.msixupload
+
+# Package signing certificates (keep .pfx out of source control for security)
+# Note: If you need to share certificates, use secure methods
+*.pfx
+
+# Temporary packaging files
+_pkginfo.txt
