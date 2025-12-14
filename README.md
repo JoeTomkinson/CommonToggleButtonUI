@@ -6,6 +6,10 @@
 
 Simple Windows 11 compatible UI for keyboard buttons that typically toggle a state.
 
+## Why this exists
+
+If you're using a **75% layout keyboard**, a **compact mechanical keyboard**, or any board without built-in LED indicators, you've probably toggled Caps Lock or Num Lock by accident and had no idea until you started typing. This little app solves that by showing a subtle toast notification whenever a lock key state changes—no more guessing!
+
 ## Desktop app
 
 The `ToggleNotifier` project contains the WPF desktop app. It runs in the background, listens for lock key changes, and shows a small toast overlay near the active display's bottom-right corner. A tray icon lets users open the settings window or exit the app. You can adjust:
@@ -15,6 +19,7 @@ The `ToggleNotifier` project contains the WPF desktop app. It runs in the backgr
 - Auto-dismiss timing
 
 Settings are saved to `%APPDATA%/CommonToggleButtonUI/appsettings.json` and loaded on startup so the runtime indicator display stays in sync with user preferences.
+
 ## What it does
 - Listens for Caps Lock, Num Lock, and Scroll Lock changes in the background.
 - Pops a toast-like overlay near the bottom-right corner of the active display with configurable offsets and an auto-dismiss timer.
