@@ -49,6 +49,20 @@ public partial class MainWindow : Window
         PopulateFields();
     }
 
+    /// <summary>
+    /// Prevents the window from being closed. Instead, it resets the form and hides the window.
+    /// This ensures the window can be shown again from the tray icon.
+    /// </summary>
+    protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+    {
+        // Cancel the close operation
+        e.Cancel = true;
+        
+        // Reset fields to saved values and hide instead
+        PopulateFields();
+        Hide();
+    }
+
     private void SetWindowIcon()
     {
         var icon = IconGenerator.CreateTrayIcon(_themeService.IsDarkMode);
