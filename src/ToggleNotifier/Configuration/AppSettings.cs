@@ -51,6 +51,11 @@ public class AppSettings
     /// Per-key notification settings.
     /// </summary>
     public KeyNotificationSettings KeySettings { get; set; } = new();
+
+    /// <summary>
+    /// Toast border customization settings.
+    /// </summary>
+    public ToastBorderSettings BorderSettings { get; set; } = new();
 }
 
 /// <summary>
@@ -108,4 +113,32 @@ public class KeyNotificationSettings
     /// Show notification for Scroll Lock changes.
     /// </summary>
     public bool ScrollLock { get; set; } = true;
+}
+
+/// <summary>
+/// Toast border customization settings.
+/// </summary>
+public class ToastBorderSettings
+{
+    /// <summary>
+    /// Whether to show a custom colored border around the toast.
+    /// </summary>
+    public bool EnableCustomBorder { get; set; } = false;
+
+    /// <summary>
+    /// Custom border color in hex format (e.g., "#0078D4").
+    /// Defaults to null which means use Windows accent color.
+    /// </summary>
+    public string? CustomBorderColor { get; set; } = null;
+
+    /// <summary>
+    /// Whether to use the Windows accent color for the border.
+    /// When true, CustomBorderColor is ignored.
+    /// </summary>
+    public bool UseAccentColor { get; set; } = true;
+
+    /// <summary>
+    /// Border thickness in pixels.
+    /// </summary>
+    public double BorderThickness { get; set; } = 2;
 }

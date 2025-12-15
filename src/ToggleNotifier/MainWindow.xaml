@@ -2,9 +2,9 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Toggle Notifier Settings"
-        Width="520"
+        Width="580"
         Height="580"
-        MinWidth="480"
+        MinWidth="520"
         MinHeight="500"
         ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
@@ -23,6 +23,7 @@
         <SolidColorBrush x:Key="ControlBackgroundBrush" Color="#FFFFFF"/>
         <SolidColorBrush x:Key="ControlBorderBrush" Color="#D4D4D4"/>
         <SolidColorBrush x:Key="ControlHoverBrush" Color="#F0F0F0"/>
+        <SolidColorBrush x:Key="HeaderFooterBackgroundBrush" Color="#FFFFFF"/>
         
         <!-- Modern Card Style -->
         <Style x:Key="SettingsCard" TargetType="Border">
@@ -262,7 +263,11 @@
         </Grid.RowDefinitions>
         
         <!-- Header -->
-        <Border Grid.Row="0" Padding="24,20,24,16">
+        <Border Grid.Row="0" 
+                Padding="24,20,24,16"
+                Background="{DynamicResource HeaderFooterBackgroundBrush}"
+                BorderThickness="0,0,0,1"
+                BorderBrush="{DynamicResource CardBorderBrush}">
             <StackPanel>
                 <TextBlock Text="Toggle Notifier"
                            FontSize="28"
@@ -334,6 +339,83 @@
                             <ComboBoxItem Content="Compact" Tag="Compact"/>
                         </ComboBox>
                     </Grid>
+                </Border>
+                
+                <!-- Border Section -->
+                <TextBlock Text="BORDER" Style="{StaticResource SectionHeader}"/>
+                
+                <Border Style="{StaticResource SettingsCard}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Custom border" FontSize="14" FontWeight="Medium" Style="{StaticResource PrimaryText}"/>
+                            <TextBlock Text="Show a colored border around the toast notification" 
+                                       FontSize="12" Margin="0,2,0,0" Style="{StaticResource SecondaryText}"/>
+                        </StackPanel>
+                        <CheckBox x:Name="EnableCustomBorderBox" 
+                                  Style="{StaticResource ToggleSwitch}"
+                                  Grid.Column="1" 
+                                  VerticalAlignment="Center"
+                                  Checked="OnCustomBorderToggled"
+                                  Unchecked="OnCustomBorderToggled"
+                                  AutomationProperties.Name="Enable custom border"/>
+                    </Grid>
+                </Border>
+                
+                <Border x:Name="BorderColorCard" Style="{StaticResource SettingsCard}" Visibility="Collapsed">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Border color" FontSize="14" FontWeight="Medium" Style="{StaticResource PrimaryText}"/>
+                                <TextBlock Text="Click the color swatch to choose a custom color" 
+                                           FontSize="12" Margin="0,2,0,0" Style="{StaticResource SecondaryText}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Border x:Name="BorderColorPreview"
+                                        Width="32" Height="32"
+                                        CornerRadius="4"
+                                        BorderThickness="1"
+                                        BorderBrush="{DynamicResource ControlBorderBrush}"
+                                        Background="#0078D4"
+                                        Cursor="Hand"
+                                        MouseLeftButtonDown="OnBorderColorClick"
+                                        ToolTip="Click to choose a color"
+                                        AutomationProperties.Name="Border color preview"/>
+                                <Button x:Name="ResetBorderColorButton"
+                                        Content="Reset to Accent"
+                                        Padding="12,6"
+                                        Margin="8,0,0,0"
+                                        Style="{StaticResource ThemedButton}"
+                                        Click="OnResetBorderColor"
+                                        AutomationProperties.Name="Reset border color to Windows accent"/>
+                            </StackPanel>
+                        </Grid>
+                        
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Border thickness" FontSize="14" FontWeight="Medium" Style="{StaticResource PrimaryText}"/>
+                                <TextBlock Text="Width of the border in pixels" 
+                                           FontSize="12" Margin="0,2,0,0" Style="{StaticResource SecondaryText}"/>
+                            </StackPanel>
+                            <TextBox x:Name="BorderThicknessBox" 
+                                     Grid.Column="1" 
+                                     VerticalAlignment="Center"
+                                     HorizontalContentAlignment="Center"
+                                     Style="{StaticResource ThemedTextBox}"
+                                     AutomationProperties.Name="Border thickness"/>
+                        </Grid>
+                    </StackPanel>
                 </Border>
                 
                 <!-- Position Section -->
@@ -522,7 +604,8 @@
         <Border Grid.Row="2" 
                 Padding="24,16" 
                 BorderThickness="0,1,0,0"
-                BorderBrush="{DynamicResource CardBorderBrush}">
+                BorderBrush="{DynamicResource CardBorderBrush}"
+                Background="{DynamicResource HeaderFooterBackgroundBrush}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>

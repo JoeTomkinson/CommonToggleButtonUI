@@ -71,8 +71,19 @@ public partial class CompactToastWindow : Window
 
         // Apply theme colors
         Container.Background = colors.BackgroundBrush;
-        Container.BorderBrush = colors.BorderBrush;
         Glyph.Foreground = colors.AccentBrush;
+
+        // Apply custom border if enabled
+        if (_settings.BorderSettings.EnableCustomBorder)
+        {
+            var borderColor = GetCustomBorderColor();
+            Container.BorderBrush = new SolidColorBrush(borderColor);
+            Container.BorderThickness = new Thickness(_settings.BorderSettings.BorderThickness);
+        }
+        else
+        {
+            Container.BorderBrush = colors.BorderBrush;
+        }
 
         // Glyph container background
         GlyphContainer.Background = new SolidColorBrush(
@@ -87,6 +98,19 @@ public partial class CompactToastWindow : Window
         IndicatorBorderBrush.Color = isDark 
             ? Color.FromArgb(245, 39, 39, 42) 
             : Color.FromArgb(250, 255, 255, 255);
+    }
+
+    private Color GetCustomBorderColor()
+    {
+        // If using accent color or no custom color specified, get Windows accent color
+        if (_settings.BorderSettings.UseAccentColor || string.IsNullOrEmpty(_settings.BorderSettings.CustomBorderColor))
+        {
+            return ThemeService.GetWindowsAccentColor();
+        }
+
+        // Parse the custom color, fall back to accent color if invalid
+        return ThemeService.ParseHexColor(_settings.BorderSettings.CustomBorderColor) 
+               ?? ThemeService.GetWindowsAccentColor();
     }
 
     private static ThemeColors GetDefaultColors(bool isDark)

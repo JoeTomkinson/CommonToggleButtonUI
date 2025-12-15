@@ -39,8 +39,8 @@
             
             <!-- Status Indicator Dot (positioned at bottom-right of glyph) -->
             <Border x:Name="StateIndicator"
-                    Width="12" Height="12" 
-                    CornerRadius="6"
+                    Width="14" Height="14" 
+                    CornerRadius="7"
                     VerticalAlignment="Bottom"
                     HorizontalAlignment="Right"
                     Margin="0,0,-2,-2"

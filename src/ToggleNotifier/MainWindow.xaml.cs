@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -12,6 +13,8 @@ using ToggleNotifier.Notifications;
 using ToggleNotifier.Services;
 using ToggleNotifier.Theming;
 using Color = System.Windows.Media.Color;
+using WinFormsColorDialog = System.Windows.Forms.ColorDialog;
+using WinFormsDialogResult = System.Windows.Forms.DialogResult;
 
 namespace ToggleNotifier;
 
@@ -22,6 +25,8 @@ public partial class MainWindow : Window
     private readonly OverlayService _overlayService;
     private readonly ThemeService _themeService;
     private AppSettings _settings;
+    private Color _currentBorderColor;
+    private bool _useAccentColor = true;
 
     public MainWindow(
         AppSettings settings,
@@ -72,6 +77,12 @@ public partial class MainWindow : Window
         Resources["TextPrimaryBrush"] = colors.TextBrush;
         Resources["TextSecondaryBrush"] = colors.TextSecondaryBrush;
         Resources["AccentBrush"] = colors.AccentBrush;
+
+        // Header and footer background (slightly different from main background for visual separation)
+        var headerFooterBackground = _themeService.IsDarkMode
+            ? new SolidColorBrush(Color.FromRgb(45, 45, 48))
+            : new SolidColorBrush(Color.FromRgb(255, 255, 255));
+        Resources["HeaderFooterBackgroundBrush"] = headerFooterBackground;
 
         // Toggle switch off state colors
         var toggleOffBackground = _themeService.IsDarkMode
@@ -147,6 +158,24 @@ public partial class MainWindow : Window
         var positionIndex = (int)_settings.ToastPosition;
         PositionComboBox.SelectedIndex = positionIndex;
 
+        // Border settings
+        EnableCustomBorderBox.IsChecked = _settings.BorderSettings.EnableCustomBorder;
+        BorderColorCard.Visibility = _settings.BorderSettings.EnableCustomBorder ? Visibility.Visible : Visibility.Collapsed;
+        BorderThicknessBox.Text = _settings.BorderSettings.BorderThickness.ToString(CultureInfo.InvariantCulture);
+        _useAccentColor = _settings.BorderSettings.UseAccentColor;
+        
+        // Set the border color preview
+        if (_settings.BorderSettings.UseAccentColor || string.IsNullOrEmpty(_settings.BorderSettings.CustomBorderColor))
+        {
+            _currentBorderColor = ThemeService.GetWindowsAccentColor();
+        }
+        else
+        {
+            _currentBorderColor = ThemeService.ParseHexColor(_settings.BorderSettings.CustomBorderColor) 
+                                  ?? ThemeService.GetWindowsAccentColor();
+        }
+        UpdateBorderColorPreview();
+
         // Key settings
         CapsLockBox.IsChecked = _settings.KeySettings.CapsLock;
         NumLockBox.IsChecked = _settings.KeySettings.NumLock;
@@ -160,6 +189,44 @@ public partial class MainWindow : Window
 
         // Startup
         LaunchOnSignInBox.IsChecked = _settings.LaunchOnSignIn;
+    }
+
+    private void UpdateBorderColorPreview()
+    {
+        BorderColorPreview.Background = new SolidColorBrush(_currentBorderColor);
+    }
+
+    private void OnCustomBorderToggled(object sender, RoutedEventArgs e)
+    {
+        if (!IsLoaded) return;
+        
+        BorderColorCard.Visibility = EnableCustomBorderBox.IsChecked == true 
+            ? Visibility.Visible 
+            : Visibility.Collapsed;
+    }
+
+    private void OnBorderColorClick(object sender, MouseButtonEventArgs e)
+    {
+        using var dialog = new WinFormsColorDialog
+        {
+            Color = System.Drawing.Color.FromArgb(_currentBorderColor.R, _currentBorderColor.G, _currentBorderColor.B),
+            FullOpen = true,
+            AnyColor = true
+        };
+
+        if (dialog.ShowDialog() == WinFormsDialogResult.OK)
+        {
+            _currentBorderColor = Color.FromRgb(dialog.Color.R, dialog.Color.G, dialog.Color.B);
+            _useAccentColor = false;
+            UpdateBorderColorPreview();
+        }
+    }
+
+    private void OnResetBorderColor(object sender, RoutedEventArgs e)
+    {
+        _currentBorderColor = ThemeService.GetWindowsAccentColor();
+        _useAccentColor = true;
+        UpdateBorderColorPreview();
     }
 
     private void OnPreview(object sender, RoutedEventArgs e)
@@ -218,6 +285,11 @@ public partial class MainWindow : Window
             dismissMs = _settings.ToastDismissMilliseconds;
         }
 
+        if (!double.TryParse(BorderThicknessBox.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out var borderThickness))
+        {
+            borderThickness = _settings.BorderSettings.BorderThickness;
+        }
+
         var theme = ThemeComboBox.SelectedIndex switch
         {
             1 => AppTheme.Light,
@@ -252,6 +324,13 @@ public partial class MainWindow : Window
                 CapsLock = CapsLockBox.IsChecked == true,
                 NumLock = NumLockBox.IsChecked == true,
                 ScrollLock = ScrollLockBox.IsChecked == true
+            },
+            BorderSettings = new ToastBorderSettings
+            {
+                EnableCustomBorder = EnableCustomBorderBox.IsChecked == true,
+                UseAccentColor = _useAccentColor,
+                CustomBorderColor = _useAccentColor ? null : ThemeService.ColorToHex(_currentBorderColor),
+                BorderThickness = Math.Max(0.5, Math.Min(10, borderThickness))
             }
         };
     }

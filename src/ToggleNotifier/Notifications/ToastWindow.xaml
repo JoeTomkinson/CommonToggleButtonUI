@@ -62,8 +62,8 @@
             <!-- State Indicator -->
             <Border Grid.Column="2" 
                     x:Name="StateIndicator"
-                    Width="12" Height="12" 
-                    CornerRadius="6"
+                    Width="16" Height="16" 
+                    CornerRadius="8"
                     VerticalAlignment="Center"
                     Margin="8,0,0,0"/>
         </Grid>

@@ -181,6 +181,81 @@ public class ThemeService
                 Accent = Color.FromArgb(255, 0, 120, 212)
             };
     }
+
+    /// <summary>
+    /// Gets the Windows accent color from the system settings.
+    /// </summary>
+    /// <returns>The Windows accent color, or a default blue if unavailable.</returns>
+    public static Color GetWindowsAccentColor()
+    {
+        try
+        {
+            using var key = Registry.CurrentUser.OpenSubKey(
+                @"Software\Microsoft\Windows\DWM");
+            var value = key?.GetValue("AccentColor");
+            if (value is int colorValue)
+            {
+                // The color is stored as ABGR (Alpha, Blue, Green, Red)
+                var a = (byte)((colorValue >> 24) & 0xFF);
+                var b = (byte)((colorValue >> 16) & 0xFF);
+                var g = (byte)((colorValue >> 8) & 0xFF);
+                var r = (byte)(colorValue & 0xFF);
+                return Color.FromArgb(a == 0 ? (byte)255 : a, r, g, b);
+            }
+        }
+        catch
+        {
+            // Fall through to default
+        }
+
+        // Default Windows 11 accent color (blue)
+        return Color.FromRgb(0, 120, 212);
+    }
+
+    /// <summary>
+    /// Parses a hex color string to a Color.
+    /// </summary>
+    /// <param name="hexColor">Hex color string (e.g., "#0078D4" or "0078D4")</param>
+    /// <returns>The parsed color, or null if invalid.</returns>
+    public static Color? ParseHexColor(string? hexColor)
+    {
+        if (string.IsNullOrWhiteSpace(hexColor))
+            return null;
+
+        try
+        {
+            var hex = hexColor.TrimStart('#');
+            if (hex.Length == 6)
+            {
+                var r = Convert.ToByte(hex.Substring(0, 2), 16);
+                var g = Convert.ToByte(hex.Substring(2, 2), 16);
+                var b = Convert.ToByte(hex.Substring(4, 2), 16);
+                return Color.FromRgb(r, g, b);
+            }
+            if (hex.Length == 8)
+            {
+                var a = Convert.ToByte(hex.Substring(0, 2), 16);
+                var r = Convert.ToByte(hex.Substring(2, 2), 16);
+                var g = Convert.ToByte(hex.Substring(4, 2), 16);
+                var b = Convert.ToByte(hex.Substring(6, 2), 16);
+                return Color.FromArgb(a, r, g, b);
+            }
+        }
+        catch
+        {
+            // Invalid format
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Converts a Color to a hex string.
+    /// </summary>
+    public static string ColorToHex(Color color)
+    {
+        return $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+    }
 }
 
 /// <summary>

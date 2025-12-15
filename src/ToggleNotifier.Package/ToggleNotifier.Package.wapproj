@@ -43,8 +43,20 @@
     <EntryPointProjectUniqueName>..\ToggleNotifier\ToggleNotifier.csproj</EntryPointProjectUniqueName>
     <!-- App Installer Configuration for Auto-Updates -->
     <GenerateAppInstallerFile>True</GenerateAppInstallerFile>
-    <!-- Note: This URI is a placeholder. Run scripts\Update-AppInstaller.ps1 after building to set correct release URLs -->
-    <AppInstallerUri>https://github.com/JoeTomkinson/CommonToggleButtonUI/releases/download/v1.1.0</AppInstallerUri>
+    <!-- 
+      IMPORTANT: AppInstallerUri must point to a STABLE URL that always hosts the LATEST .appinstaller file.
+      Windows checks this URL to determine if updates are available by comparing the version in the hosted 
+      .appinstaller file against the installed version.
+      
+      DO NOT use a version-specific release URL here - that defeats the update mechanism!
+      
+      Recommended: Use GitHub Pages to host .appinstaller files at a fixed URL.
+      Example: https://joetomkinson.github.io/CommonToggleButtonUI/releases/
+      
+      After building, run scripts\Update-AppInstaller.ps1 to set the correct URLs in the generated files.
+      Then upload .appinstaller files to BOTH the GitHub Release AND your stable hosting location.
+    -->
+    <AppInstallerUri>https://joetomkinson.github.io/CommonToggleButtonUI/releases</AppInstallerUri>
     <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
     <AppInstallerUpdateFrequency>0</AppInstallerUpdateFrequency>
     <AppInstallerShowPrompt>True</AppInstallerShowPrompt>
@@ -56,6 +68,25 @@
     <AppxPackageDir>$(SolutionDir)AppPackages\</AppxPackageDir>
     <PackageCertificateThumbprint>AEA3AA74898598263C1AEEE029075AD1A71CC5DE</PackageCertificateThumbprint>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+    <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <AppxBundle>Always</AppxBundle>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <AppxBundle>Always</AppxBundle>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <AppxBundle>Always</AppxBundle>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <AppxBundle>Always</AppxBundle>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <AppxBundle>Always</AppxBundle>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <AppxBundle>Always</AppxBundle>
   </PropertyGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

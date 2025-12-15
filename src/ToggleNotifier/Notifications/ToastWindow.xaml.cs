@@ -71,10 +71,21 @@ public partial class ToastWindow : Window
 
         // Apply theme colors
         Container.Background = colors.BackgroundBrush;
-        Container.BorderBrush = colors.BorderBrush;
         TitleBlock.Foreground = colors.TextBrush;
         StateBlock.Foreground = colors.TextSecondaryBrush;
         Glyph.Foreground = colors.AccentBrush;
+
+        // Apply custom border if enabled
+        if (_settings.BorderSettings.EnableCustomBorder)
+        {
+            var borderColor = GetCustomBorderColor();
+            Container.BorderBrush = new SolidColorBrush(borderColor);
+            Container.BorderThickness = new Thickness(_settings.BorderSettings.BorderThickness);
+        }
+        else
+        {
+            Container.BorderBrush = colors.BorderBrush;
+        }
 
         // Glyph container background
         GlyphContainer.Background = new SolidColorBrush(
@@ -84,6 +95,19 @@ public partial class ToastWindow : Window
         StateIndicator.Background = isOn
             ? new SolidColorBrush(Color.FromRgb(16, 185, 129))  // Emerald green
             : new SolidColorBrush(Color.FromRgb(107, 114, 128)); // Gray
+    }
+
+    private Color GetCustomBorderColor()
+    {
+        // If using accent color or no custom color specified, get Windows accent color
+        if (_settings.BorderSettings.UseAccentColor || string.IsNullOrEmpty(_settings.BorderSettings.CustomBorderColor))
+        {
+            return ThemeService.GetWindowsAccentColor();
+        }
+
+        // Parse the custom color, fall back to accent color if invalid
+        return ThemeService.ParseHexColor(_settings.BorderSettings.CustomBorderColor) 
+               ?? ThemeService.GetWindowsAccentColor();
     }
 
     private static ThemeColors GetDefaultColors(bool isDark)
